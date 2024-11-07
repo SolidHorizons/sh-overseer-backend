@@ -11,10 +11,11 @@ import random
 import math
 import re
 import discord.ext
+import constants
 
 async def setup(bot: commands.Bot):
                                                                 #SH ID
-    await bot.add_cog(maincog(bot), guilds=[discord.Object(id=1259185634334081084)])
+    await bot.add_cog(maincog(bot), guilds=[discord.Object(id=constants.SOLIDHORIZONSGUILDID)])
 
 class maincog(commands.Cog):
 
