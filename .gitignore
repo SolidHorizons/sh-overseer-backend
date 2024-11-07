@@ -1,0 +1,4 @@
+/applogs/*.log
+/applogs/*.txt
+/__pycache__/
+.env
