@@ -13,14 +13,14 @@ import re
 import discord.ext
 import constants
 
-async def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot) -> None:
     
     await bot.add_cog(maincog(bot), guilds=[discord.Object(id=constants.SOLIDHORIZONSGUILDID)])
 
 class maincog(commands.Cog):
 
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
 
