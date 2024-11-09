@@ -14,7 +14,7 @@ import discord.ext
 import constants
 
 async def setup(bot: commands.Bot):
-                                                                #SH ID
+    
     await bot.add_cog(maincog(bot), guilds=[discord.Object(id=constants.SOLIDHORIZONSGUILDID)])
 
 class maincog(commands.Cog):
@@ -26,15 +26,14 @@ class maincog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self) -> None:       # when the cog is loaded in it will print in the console that it's working
+
+        guilds : list[discord.Guild] = self.bot.guilds
+        print(guilds)
+        for guild in guilds:
+            await self.bot.tree.sync(guild=guild) 
+            print(f"in sync for {guild.name}")
+
         print(f'{self.__cog_name__} is ready')
-
-
-    @commands.command()
-    async def sync(self, ctx : discord.ext.commands.Context) -> None:
-        print("in sync")
-        bot : discord.ext.commands.Bot = ctx.bot
-        fmt = await bot.tree.sync(guild=ctx.guild) 
-        await ctx.send(f"synced {len(fmt)} commands")
 
 
     @app_commands.command(name="sayhello", description="say hello bot")
