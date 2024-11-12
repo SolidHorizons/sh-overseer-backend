@@ -36,14 +36,14 @@ class main:
 
     async def run_bot(self) -> None:
 
-        await self.initiateCogs()
-                                #"dcKey" / "betaDcKey"
+        await self.initiateCogs() #"dcKey" / "betaDcKey"
         await self.bot.start(constants.DCKEY) # start the bot
 
 
     async def initiateCogs(self):
         try:
             await self.bot.load_extension("maincog")
+            await self.bot.load_extension("apicog")
 
         except Exception as e:
             print(f"Failed to load extensions: {e}")

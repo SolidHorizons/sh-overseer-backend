@@ -15,9 +15,17 @@ import constants
 import aiohttp
 import requests as rq
 
+
 async def setup(bot: commands.Bot) -> None:
     
-    await bot.add_cog(apicog(bot), guilds=[discord.Object(id=constants.SOLIDHORIZONSGUILDID)])
+    guilds : list[discord.Guild] = bot.guilds
+    guildObjects : list[discord.Object] = []
+
+    for guild in guilds:
+        guildObjects.append(discord.Object(id=guild.id))
+    
+    await bot.add_cog(apicog(bot), guilds=guildObjects)
+
 
 class apicog(commands.Cog):
 
@@ -25,17 +33,22 @@ class apicog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self) -> None:       # when the cog is loaded in it will print in the console that it's working
 
         guilds : list[discord.Guild] = self.bot.guilds
-        print(guilds)
+
         for guild in guilds:
+            self.bot.tree.copy_global_to(guild=guild)
             await self.bot.tree.sync(guild=guild) 
-            print(f"in sync for {guild.name}")
+            log.info(f"apicog in sync for {guild.name}")
 
         print(f'{self.__cog_name__} is ready')
+
+
+    @app_commands.command(name="sayhelloapi", description="say hello api")
+    async def sayhelloapi(self, interaction: discord.Interaction):
+        await interaction.response.send_message(f"hello {interaction.user.name} this is api")
 
 
     async def makeRequest(self, method, url, headers=None, params=None, data=None) -> dict:
