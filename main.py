@@ -4,7 +4,8 @@ import asyncio
 import logging as log
 import datetime as dt
 import os
-from dotenv import load_dotenv, dotenv_values 
+from dotenv import load_dotenv
+import constants
 
 
 class main:
@@ -21,11 +22,10 @@ class main:
         )
         log.raiseExceptions = False
         log.captureWarnings(False)
-        load_dotenv()
 
 
     intents = discord.Intents.all()                            #"applicationID" / "betaApplicationID"
-    bot = commands.Bot(command_prefix='*', intents=intents, application_id=os.getenv("applicationID"))
+    bot = commands.Bot(command_prefix='*', intents=intents, application_id=constants.APPLICATIONID)
 
 
     def run_bot_loop(self) -> None:
@@ -36,14 +36,14 @@ class main:
 
     async def run_bot(self) -> None:
 
-        await self.initiateCogs()
-                            #"dcKey" / "betaDcKey"
-        await self.bot.start(os.getenv("dcKey")) # start the bot
+        await self.initiateCogs() #"dcKey" / "betaDcKey"
+        await self.bot.start(constants.DCKEY) # start the bot
 
 
     async def initiateCogs(self):
         try:
             await self.bot.load_extension("maincog")
+            await self.bot.load_extension("apicog")
 
         except Exception as e:
             print(f"Failed to load extensions: {e}")
