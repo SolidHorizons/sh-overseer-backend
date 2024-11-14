@@ -1,17 +1,12 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import os
 import logging as log
 import datetime as dt
-import asyncio
-import json
 import discord.ext.commands
-import random
-import math
-import re
 import discord.ext
-import constants
+import Constants
+from ChatFilter import ChatFilter
 
 
 async def setup(bot: commands.Bot) -> None:
@@ -31,6 +26,7 @@ class maincog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+    instCF = ChatFilter()
 
     @commands.Cog.listener()
     async def on_ready(self) -> None:       # when the cog is loaded in it will print in the console that it's working
@@ -43,6 +39,11 @@ class maincog(commands.Cog):
             log.info(f"maincog in sync for {guild.name}")
 
         print(f'{self.__cog_name__} is ready')
+
+
+    @commands.Cog.listener()
+    async def on_message(self, message : discord.Message):
+        await self.instCF.handleText(message.content)
 
 
     @app_commands.command(name="sayhello", description="say hello bot")

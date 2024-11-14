@@ -1,0 +1,58 @@
+[
+    {
+        "word" : "retard",
+        "severity" : 1
+    },
+    {
+        "word" : "faggot",
+        "severity" : 2
+    },
+    {
+        "word" : "fag",
+        "severity" : 2
+    },
+    {
+        "word" : "nigger",
+        "severity" : 3
+    },
+    {
+        "word" : "nigga",
+        "severity" : 3
+    },
+    {
+        "word" : "nggr",
+        "severity" : 3
+    },
+    {
+        "word" : "baboon",
+        "severity" : 3
+    },
+    {
+        "word" : "blacky",
+        "severity" : 3
+    },
+    {
+        "word" : "dick",
+        "severity" : 0
+    },
+    {
+        "word" : "cock",
+        "severity" : 0
+    },
+    {
+        "word" : "cunt",
+        "severity" : 0
+    },
+    {
+        "word" : "bitch",
+        "severity" : 1
+    },
+    {
+        "word" : "bitchass",
+        "severity" : 1
+    },
+    {
+        "word" : "twink",
+        "severity" : 1
+    }
+]

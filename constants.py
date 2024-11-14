@@ -1,6 +1,7 @@
 import datetime as dt
 import os
 from dotenv import load_dotenv
+from enum import Enum
 
 
 #functions reuired to set a constant
@@ -14,5 +15,19 @@ DCKEY = os.getenv("dcKey")
 BETADCKEY = os.getenv("betaDcKey")
 
 
-#constants relating to discord
-SOLIDHORIZONSGUILDID = 1259185634334081084
+#data paths
+WORDLIBPATH = os.path.join(os.path.dirname(__file__), "data", "wordlib.json")
+DECODELIBPATH = os.path.join(os.path.dirname(__file__), "data", "decodelib.json")
+
+
+#Chat filter constants
+WORDMAXFILTER = 1
+FILTERCUTOFF = 0.4
+
+
+#enums
+class SeverityFlag(Enum):
+    ACTION_NONE = 0
+    ACTION_MILD = 1
+    ACTION_SEVERE = 2
+    ACTION_EXTREME = 3
