@@ -24,7 +24,7 @@ class ChatFilter:
                 highestSeverity = wordMd.severity
 
 
-        flaggedMessage = FlaggedMessage(context.guild.id, context.author.id, highestSeverity, result)
+        flaggedMessage = FlaggedMessage(context.guild.id, context.author.id, context.id, highestSeverity, [word.to_dict() for word in result])
         await Utils.appendToJson(Constants.FLAGGEDMESSAGESPATH, flaggedMessage)
 
         return True
@@ -59,7 +59,7 @@ class ChatFilter:
         return ''.join(result)
     
 
-    async def readTextForWordlib(self, deobfuscatedText: str) -> list[str] | None:
+    async def readTextForWordlib(self, deobfuscatedText: str) -> list[WordModel] | None:
         """
         Returns list of WordModel matches if a word (or multiple) from wordlib is found.
         """
@@ -74,7 +74,6 @@ class ChatFilter:
                 exactMatches.append(wordMd)
         
         if len(exactMatches) > 0:
-            print(f"exact finds: {exactMatches}")
             return exactMatches
 
         for wordInTextFuzzy in deobfuscatedText.lower().split(" "):             #checks text for approximate matches
@@ -89,7 +88,6 @@ class ChatFilter:
                     fuzzyMatches.append(wordModel)
 
         if len(fuzzyMatches) > 0:
-            print(f"fuzzy finds: {fuzzyMatches}")
             return fuzzyMatches
         
         return None
