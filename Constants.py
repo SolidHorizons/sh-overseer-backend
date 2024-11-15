@@ -18,10 +18,11 @@ BETADCKEY = os.getenv("betaDcKey")
 #data paths
 WORDLIBPATH = os.path.join(os.path.dirname(__file__), "data", "wordlib.json")
 DECODELIBPATH = os.path.join(os.path.dirname(__file__), "data", "decodelib.json")
+FLAGGEDMESSAGESPATH = os.path.join(os.path.dirname(__file__), "data", "flaggedmessages.json")
 
 
 #Chat filter constants
-WORDMAXFILTER = 1
+WORDMAXFILTER = 2
 FILTERCUTOFF = 0.4
 
 

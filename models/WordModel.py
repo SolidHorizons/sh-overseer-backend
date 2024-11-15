@@ -1,8 +1,9 @@
 from models.IModel import IModel
+import Constants
 
 class WordModel(IModel):
 
-    def __init__(self, word, severity):       #creates an EventCycle object with serverdata, eventtype, what file needs to be swapped out and when it happened
+    def __init__(self, word : str, severity : Constants.SeverityFlag):
         self.word = word
         self.severity = severity
 

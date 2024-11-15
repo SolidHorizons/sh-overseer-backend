@@ -105,3 +105,42 @@ class Utils(Generic[T]):
         except (IOError, ValueError) as e:
             log.info(f"Error writing JSON to file: {e}")
             return False
+        
+
+    @staticmethod
+    async def appendToJson(file_name: Union[str, os.PathLike], obj: T) -> bool:
+        """
+        Appends a single object to a json file. If the file does not exist or
+        contains invalid JSON, it creates a new file with the object in a list.
+
+        Params:
+            (str or os.PathLike) file_name: allows for string paths or os.PathLike paths.
+            (T) obj: the object to be converted to a dictionary and appended to the json file.
+
+        Returns:
+            (bool): True if the operation is successful, False otherwise.
+        """
+        try:
+
+            with open(file_name, "r+") as file:
+
+                try:
+                    data = json.load(file)
+
+                    if not isinstance(data, list):
+                        raise ValueError("Json content must be a list of objects")
+                    
+                except (ValueError, json.JSONDecodeError):
+                    log.info("Invalid JSON format detected. Creating a new list.")
+                    data = []
+
+                data.append(obj.to_dict())
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
+
+            return True
+
+        except Exception as e:
+            log.info(f"An error occurred while appending to the json file: {e}")
+            return False

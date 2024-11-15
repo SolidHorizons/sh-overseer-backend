@@ -2,15 +2,33 @@ from Utils import Utils
 import Constants
 import difflib
 from models.WordModel import WordModel
+from models.FlaggedMessage import FlaggedMessage
+import discord
 
 class ChatFilter:
 
-    async def handleText(self, inputText : str) -> bool: 
+    async def handleText(self, context : discord.Message) -> bool: 
         """
         Returns true or false if the text contains a word part of the wordlib.
         """
-        deobfuscatedTextResult : str = await self.deobfuscateText(inputText)
-        return await self.readTextForWordlib(deobfuscatedTextResult)
+        deobfuscatedTextResult : str = await self.deobfuscateText(context.content)
+        result : list[WordModel] | None = await self.readTextForWordlib(deobfuscatedTextResult)
+
+        if result is None:
+
+            return False
+        
+        highestSeverity = 0
+        for wordMd in result:
+            if wordMd.severity > highestSeverity:
+                highestSeverity = wordMd.severity
+
+
+        flaggedMessage = FlaggedMessage(context.guild.id, context.author.id, highestSeverity, result)
+        await Utils.appendToJson(Constants.FLAGGEDMESSAGESPATH, flaggedMessage)
+
+        return True
+        
 
     
     async def deobfuscateText(self, encodedText : str) -> str:
@@ -41,29 +59,37 @@ class ChatFilter:
         return ''.join(result)
     
 
-    async def readTextForWordlib(self, deobfuscatedText: str) -> list[str]:
+    async def readTextForWordlib(self, deobfuscatedText: str) -> list[str] | None:
         """
-        Returns true or false based on if a word from wordlib is found.
-        Fuzzy matching is used to find approximate matches.
+        Returns list of WordModel matches if a word (or multiple) from wordlib is found.
         """
-        wordlib : list[WordModel] = await Utils.fromJson(Constants.WORDLIBPATH, WordModel)
+        wordlib : list[WordModel] = await Utils.fromJson(Constants.WORDLIBPATH, WordModel) #loads in the word library
 
-        words = [word.word for word in wordlib]
+        exactMatches : list[WordModel] = []
+        fuzzyResults : list[str] = []
+        fuzzyMatches : list[WordModel] = []
 
-        exactMatches : list[str] = []
-        fuzzyMatches : list[str] = []
-
-        for wordToFilter in words:
-            if deobfuscatedText.lower().__contains__(wordToFilter):
-                exactMatches.append(wordToFilter)
+        for wordMd in wordlib:
+            if deobfuscatedText.lower().__contains__(wordMd.word): #checks text for exact matches
+                exactMatches.append(wordMd)
         
         if len(exactMatches) > 0:
             print(f"exact finds: {exactMatches}")
             return exactMatches
 
-        for wordInTextFuzzy in deobfuscatedText.lower().split(" "):
-            fuzzyMatches : list[str] = difflib.get_close_matches(wordInTextFuzzy, words, n=Constants.WORDMAXFILTER, cutoff=Constants.FILTERCUTOFF)
+        for wordInTextFuzzy in deobfuscatedText.lower().split(" "):             #checks text for approximate matches
+            fuzzyResults = difflib.get_close_matches(wordInTextFuzzy, wordMd.word, n=Constants.WORDMAXFILTER, cutoff=Constants.FILTERCUTOFF)
+        
+        if len(fuzzyResults) > 0:
+            return None
+        
+        for result in fuzzyResults:
+            for wordModel in wordlib:
+                if result == wordModel:
+                    fuzzyMatches.append(wordModel)
 
         if len(fuzzyMatches) > 0:
             print(f"fuzzy finds: {fuzzyMatches}")
             return fuzzyMatches
+        
+        return None

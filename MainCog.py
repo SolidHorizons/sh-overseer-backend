@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord import app_commands
 import logging as log
 import datetime as dt
-import discord.ext.commands
 import discord.ext
 import Constants
 from ChatFilter import ChatFilter
@@ -43,7 +42,7 @@ class maincog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message : discord.Message):
-        await self.instCF.handleText(message.content)
+        await self.instCF.handleText(message)
 
 
     @app_commands.command(name="sayhello", description="say hello bot")
