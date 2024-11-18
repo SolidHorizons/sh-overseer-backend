@@ -5,7 +5,7 @@ import logging as log
 import datetime as dt
 import os
 from dotenv import load_dotenv
-import constants
+import Constants
 
 
 class main:
@@ -25,7 +25,7 @@ class main:
 
 
     intents = discord.Intents.all()                            #"applicationID" / "betaApplicationID"
-    bot = commands.Bot(command_prefix='*', intents=intents, application_id=constants.APPLICATIONID)
+    bot = commands.Bot(command_prefix='*', intents=intents, application_id=Constants.APPLICATIONID)
 
 
     def run_bot_loop(self) -> None:
@@ -37,13 +37,12 @@ class main:
     async def run_bot(self) -> None:
 
         await self.initiateCogs() #"dcKey" / "betaDcKey"
-        await self.bot.start(constants.DCKEY) # start the bot
+        await self.bot.start(Constants.DCKEY) # start the bot
 
 
     async def initiateCogs(self):
         try:
-            await self.bot.load_extension("maincog")
-            await self.bot.load_extension("apicog")
+            await self.bot.load_extension("MainCog")
 
         except Exception as e:
             print(f"Failed to load extensions: {e}")
