@@ -43,7 +43,7 @@ class main:
 
 
     def run_api(self):
-        api = startApi()  # Initialize your API
+        api = startApi()  
         uvicorn.run(api, host="127.0.0.1", port=8000)
 
 
