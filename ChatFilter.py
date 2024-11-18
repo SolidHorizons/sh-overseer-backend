@@ -73,21 +73,21 @@ class ChatFilter:
             if deobfuscatedText.lower().__contains__(wordMd.word): #checks text for exact matches
                 exactMatches.append(wordMd)
         
-        if len(exactMatches) > 0:
-            return exactMatches
+            if len(exactMatches) > 0:
+                return exactMatches
 
-        for wordInTextFuzzy in deobfuscatedText.lower().split(" "):             #checks text for approximate matches
-            fuzzyResults = difflib.get_close_matches(wordInTextFuzzy, wordMd.word, n=Constants.WORDMAXFILTER, cutoff=Constants.FILTERCUTOFF)
-        
-        if len(fuzzyResults) > 0:
-            return None
-        
-        for result in fuzzyResults:
-            for wordModel in wordlib:
-                if result == wordModel:
-                    fuzzyMatches.append(wordModel)
+            for wordInTextFuzzy in deobfuscatedText.lower().split(" "):             #checks text for approximate matches
+                fuzzyResults = difflib.get_close_matches(wordInTextFuzzy, wordMd.word, n=Constants.WORDMAXFILTER, cutoff=Constants.FILTERCUTOFF)
+            
+            if len(fuzzyResults) > 0:
+                return None
+            
+            for result in fuzzyResults:
+                for wordModel in wordlib:
+                    if result == wordModel:
+                        fuzzyMatches.append(wordModel)
 
-        if len(fuzzyMatches) > 0:
-            return fuzzyMatches
+            if len(fuzzyMatches) > 0:
+                return fuzzyMatches
         
         return None
