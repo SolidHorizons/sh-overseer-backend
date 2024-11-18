@@ -1,4 +1,5 @@
 /applogs/*.log
 /applogs/*.txt
 /__pycache__/
+models/__pycache__/
 .env
