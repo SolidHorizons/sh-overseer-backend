@@ -23,8 +23,9 @@ class ChatFilter:
             if wordMd.severity > highestSeverity:
                 highestSeverity = wordMd.severity
 
-
-        flaggedMessage = FlaggedMessage(context.guild.id, context.author.id, context.id, highestSeverity, [word.to_dict() for word in result])
+        flaggedMessages : list[FlaggedMessage] = await Utils.fromJson(Constants.FLAGGEDMESSAGESPATH, FlaggedMessage)
+        flaggedIDMax = flaggedMessages[-1].flagID
+        flaggedMessage = FlaggedMessage(flaggedIDMax + 1, context.guild.id, context.author.id, context.id, highestSeverity, [word.to_dict() for word in result])
         await Utils.appendToJson(Constants.FLAGGEDMESSAGESPATH, flaggedMessage)
 
         return True
