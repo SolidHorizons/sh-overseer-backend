@@ -13,6 +13,8 @@ APPLICATIONID = os.getenv("applicationID")
 BETAAPPLICATIONID = os.getenv("betaApplicationID")
 DCKEY = os.getenv("dcKey")
 BETADCKEY = os.getenv("betaDcKey")
+ALLOWOCR = os.getenv("allowOCR")
+ALLOWTEXTMODERATION = os.getenv("allowTextModeration")
 
 
 #data paths
