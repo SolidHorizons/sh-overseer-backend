@@ -42,7 +42,15 @@ class maincog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message : discord.Message):
-        await self.instCF.handleText(message)
+
+        if message.content and Constants.ALLOWTEXTMODERATION:
+            await self.instCF.handleText(context=message)
+
+        if message.attachments and Constants.ALLOWOCR:
+            await self.instCF.handleAttachments(message)
+
+        if message.embeds and Constants.ALLOWOCR:
+            await self.instCF.handleEmbed(message)
 
 
     @app_commands.command(name="sayhello", description="say hello bot")
