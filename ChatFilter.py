@@ -63,7 +63,6 @@ class ChatFilter:
             flaggedIDMax = flaggedMessages[-1].flagID + 1
         except IndexError:
             log.info("index not available, setting ID 0")
-        finally:
             flaggedIDMax = 0
 
         flaggedMessage = FlaggedMessage(flaggedIDMax, context.guild.id, context.author.id, context.id, highestSeverity, [word.to_dict() for word in result])
