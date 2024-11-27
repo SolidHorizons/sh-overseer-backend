@@ -6,7 +6,10 @@ import datetime as dt
 import os
 from dotenv import load_dotenv
 import Constants
-
+from Api import Api, startApi
+from fastapi import FastAPI
+import uvicorn
+import threading
 
 class main:
 
@@ -17,35 +20,41 @@ class main:
         log.basicConfig(
             filename=log_file_path,
             level=log.INFO,
-            format=f'[%(asctime)s] -- %(message)s',
+            format='[%(asctime)s] -- %(message)s',
             filemode='a'
         )
         log.raiseExceptions = False
         log.captureWarnings(False)
 
-
-    intents = discord.Intents.all()                            #"applicationID" / "betaApplicationID"
-    bot = commands.Bot(command_prefix='*', intents=intents, application_id=Constants.APPLICATIONID)
-
-
-    def run_bot_loop(self) -> None:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.run_bot())
+        self.intents = discord.Intents.all()
+        self.bot = commands.Bot(command_prefix='*', intents=self.intents, application_id=Constants.APPLICATIONID)
 
 
     async def run_bot(self) -> None:
-
-        await self.initiateCogs() #"dcKey" / "betaDcKey"
-        await self.bot.start(Constants.DCKEY) # start the bot
+        await self.initiateCogs()
+        await self.bot.start(Constants.DCKEY)  # start the bot
 
 
     async def initiateCogs(self):
         try:
             await self.bot.load_extension("MainCog")
-
         except Exception as e:
             print(f"Failed to load extensions: {e}")
+
+
+    def run_api(self):
+        api = startApi()  
+        uvicorn.run(api, host="127.0.0.1", port=8000)
+
+
+    def run_bot_loop(self) -> None:
+
+        api_thread = threading.Thread(target=self.run_api, daemon=True)
+        api_thread.start()
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self.run_bot())
 
 
 
